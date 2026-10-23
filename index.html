@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ستور - ملابس وكشاكيل وعطور ومذكرات وشنط | أسيوط</title>
+  <meta name="description" content="ملابس، كشاكيل، عطور، مذكرات، نوتبوكس وشنط. توصيل لحد البيت في أسيوط.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#top" class="logo" id="storeName">ستور</a>
+      <input type="search" id="searchInput" class="search" placeholder="ابحث عن منتج..." aria-label="بحث">
+      <button class="cart-btn" id="openCart" aria-label="فتح السلة">
+        🛒 <span>السلة</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container">
+        <h1>كل اللي محتاجه للدراسة والشغل والهدايا</h1>
+        <p>ملابس، كشاكيل، مذكرات، Notebooks، عطور وشنط. توصيل لحد باب البيت في <span id="cityName">أسيوط</span>.</p>
+        <div class="hero-badges">
+          <span>🚚 توصيل للبيت</span>
+          <span>💵 كاش عند الاستلام</span>
+          <span>📱 محافظ + InstaPay</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="categories" id="categories"></div>
+      <div class="grid" id="productsGrid"></div>
+      <p class="empty" id="emptyMsg" hidden>مفيش منتجات مطابقة للبحث.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>ساعات العمل: <span id="workingHours"></span></p>
+      <p>للطلب والاستفسار: <a id="footerWhats" href="#" target="_blank" rel="noopener">واتساب</a></p>
+    </div>
+  </footer>
+
+  <!-- زر واتساب عائم -->
+  <a class="float-whats" id="floatWhats" href="#" target="_blank" rel="noopener" aria-label="واتساب">💬</a>
+
+  <!-- السلة (درج جانبي) -->
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <h2>سلة المشتريات</h2>
+      <button id="closeCart" class="icon-btn" aria-label="إغلاق">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div id="cartItems"></div>
+      <p class="empty" id="cartEmpty">السلة فاضية. ضيف منتجات من الصفحة.</p>
+
+      <div id="checkout" hidden>
+        <div class="coupon">
+          <div class="coupon-row">
+            <input type="text" id="couponInput" placeholder="عندك كود خصم؟" autocomplete="off" autocapitalize="characters" aria-label="كود الخصم">
+            <button type="button" id="applyCoupon">تطبيق</button>
+          </div>
+          <p class="coupon-msg" id="couponMsg" hidden></p>
+        </div>
+
+        <div class="summary">
+          <div><span>المجموع</span><b id="sumSubtotal">0</b></div>
+          <div id="discountRow" class="discount-row" hidden><span>الخصم (<span id="discountCode"></span>)</span><b id="sumDiscount">0</b></div>
+          <div><span>التوصيل</span><b id="sumDelivery">0</b></div>
+          <div class="total"><span>الإجمالي</span><b id="sumTotal">0</b></div>
+          <small id="freeNote"></small>
+        </div>
+
+        <form id="orderForm" novalidate>
+          <h3>بيانات التوصيل</h3>
+
+          <label>الاسم
+            <input type="text" id="custName" required autocomplete="name">
+          </label>
+
+          <label>رقم التليفون
+            <input type="tel" id="custPhone" required inputmode="tel" autocomplete="tel" placeholder="01xxxxxxxxx">
+          </label>
+
+          <label>المنطقة
+            <select id="custArea" required></select>
+          </label>
+
+          <label>العنوان بالتفصيل
+            <textarea id="custAddress" rows="2" required placeholder="الشارع، رقم العمارة، علامة مميزة..."></textarea>
+          </label>
+
+          <label>ملاحظات (اختياري)
+            <textarea id="custNotes" rows="2"></textarea>
+          </label>
+
+          <h3>طريقة الدفع</h3>
+          <div class="pay-options">
+            <label class="pay"><input type="radio" name="pay" value="cash" checked> 💵 كاش عند الاستلام</label>
+            <label class="pay"><input type="radio" name="pay" value="wallet"> 📱 محفظة إلكترونية</label>
+            <label class="pay"><input type="radio" name="pay" value="instapay"> 🏦 InstaPay</label>
+          </div>
+          <div class="pay-info" id="payInfo" hidden></div>
+
+          <p class="error" id="formError" hidden></p>
+          <button type="submit" class="btn-whats">إرسال الطلب على واتساب</button>
+          <small class="hint">هتتحول لواتساب برسالة جاهزة، دوس إرسال لتأكيد الطلب.</small>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- نافذة تفاصيل المنتج -->
+  <div class="modal" id="productModal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="pmName">
+      <button class="icon-btn modal-close" id="closeProduct" aria-label="إغلاق">✕</button>
+      <div class="modal-grid">
+        <div class="gallery">
+          <div class="gallery-main" id="pmMain"></div>
+          <div class="thumbs" id="pmThumbs"></div>
+        </div>
+        <div class="pm-info">
+          <span class="pm-cat" id="pmCat"></span>
+          <h2 id="pmName"></h2>
+          <div class="price-row">
+            <span class="price pm-price" id="pmPrice"></span>
+            <span class="old-price" id="pmOldPrice"></span>
+          </div>
+          <p class="pm-stock" id="pmStock"></p>
+          <div class="pm-sizes" id="pmSizesWrap" hidden>
+            <div class="pm-sizes-title">المقاس</div>
+            <div class="size-list" id="pmSizes"></div>
+            <p class="size-error" id="pmSizeError" hidden>اختار المقاس الأول</p>
+          </div>
+          <p class="pm-details" id="pmDetails"></p>
+          <ul class="pm-features" id="pmFeatures"></ul>
+          <table class="pm-specs" id="pmSpecs"></table>
+          <div class="pm-actions">
+            <div class="qty qty-big">
+              <button type="button" id="pmDec" aria-label="تقليل">−</button>
+              <span id="pmQty">1</span>
+              <button type="button" id="pmInc" aria-label="زيادة">+</button>
+            </div>
+            <button type="button" class="add-btn pm-add" id="pmAdd">أضف للسلة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
